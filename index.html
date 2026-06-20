@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بصمتي الصغيرة - كتاب التلوين التفاعلي</title>
-    
+    <title>بصمتي الصغيرة - نسخة الآيباد والهاتف</title>
     <style>
         :root {
             --primary: #4A90E2;
@@ -19,7 +18,7 @@
             -webkit-user-select: none;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
+            touch-action: none; /* يمنع اهتزاز الشاشة أثناء التلوين بالآيباد */
         }
 
         body {
@@ -30,187 +29,190 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            padding-bottom: 20px;
+            overflow: hidden;
+            padding-bottom: 10px;
         }
 
         header {
             background: linear-gradient(135deg, #FFB74D, #FF8A65);
             width: 100%;
-            padding: 12px;
+            padding: 8px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             color: white;
-            position: relative;
-            z-index: 10;
         }
 
-        header h1 { font-size: 22px; font-weight: bold; }
+        header h1 { font-size: 20px; font-weight: bold; }
+        header p { font-size: 12px; opacity: 0.9; }
 
-        .main-toolbar {
+        /* شريط أدوات مرن ومتناسق مع شاشات الهواتف والآيباد */
+        .toolbar {
             background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 10px 15px;
+            border-radius: 12px;
+            padding: 8px 12px;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
             justify-content: center;
             box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-            margin: 15px 0 5px 0;
+            margin: 10px 0;
             width: 95%;
-            max-width: 950px;
-            position: relative;
-            z-index: 10;
+            max-width: 600px;
         }
-
-        .color-palette-container {
-            background: #FFFFFF;
-            border-radius: 12px;
-            padding: 10px;
-            width: 95%;
-            max-width: 950px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .palette-title { font-size: 13px; font-weight: bold; color: #546E7A; text-align: right; margin-bottom: 8px; }
-        
-        /* تحسين شبكة الألوان لتظهر بوضوح تام وتكون قابلة للضغط بسهولة */
-        .colors-grid { 
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px; 
-            justify-content: center;
-        }
-        .color-block { 
-            width: 28px;
-            height: 28px;
-            border-radius: 6px; 
-            cursor: pointer; 
-            border: 1px solid rgba(0,0,0,0.25); 
-            display: inline-block;
-        }
-        .color-block.active-color { transform: scale(1.2); border: 2.5px solid #000000; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
 
         .btn {
             background-color: var(--light);
             border: 2px solid #CFD8DC;
-            border-radius: 10px;
-            padding: 8px 14px;
+            border-radius: 8px;
+            padding: 6px 12px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             color: var(--dark);
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
+
         .btn.active { background-color: var(--primary); color: white; border-color: var(--primary); }
         .btn-audio { background-color: #9C27B0; color: white; border-color: #9C27B0; }
 
+        .color-section {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #ECEFF1;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .native-color-picker {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background: none;
+        }
+
+        /* حاوية العرض المستقيمة تماماً المناسبة للمس */
         .scene-container {
-            width: 95%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 400px; 
+            height: 520px; 
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            padding: 0 60px;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .flat-book {
             width: 100%;
-            max-width: 450px;
+            height: 100%;
             position: relative;
-            background: transparent;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            border-radius: 12px;
+            background-color: #FFFFFF;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 5px 0 8px rgba(0,0,0,0.15);
+            border-radius: 4px 10px 10px 4px;
             overflow: hidden;
         }
 
-        .page-content-wrapper { 
-            position: relative; 
-            width: 100%; 
-            display: block;
+        .page-content-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
-        .page-img { 
-            width: 100%; 
-            height: auto; 
-            display: block;
-            pointer-events: none; 
-            user-select: none;
-            -webkit-user-drag: none;
+        .page-img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            pointer-events: none;
+            position: absolute;
         }
 
-        /* الكانفاس فوق الصورة تماماً ومستعد لاستقبال التلوين واللمس */
-        .drawing-canvas { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: 5; 
-            cursor: crosshair; 
-            touch-action: none; 
-            background: transparent;
+        .book-spine-line {
+            position: absolute;
+            top: 0;
+            right: 4px;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to left, rgba(0,0,0,0.15), rgba(0,0,0,0));
+            z-index: 20;
+            pointer-events: none;
         }
 
-        .nav-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%); background: #FFFFFF; border: 3px solid var(--primary);
-            width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 24px; font-weight: bold; color: var(--primary); cursor: pointer; z-index: 20; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        .drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
         }
-        .arrow-left { left: 0px; } .arrow-right { right: 0px; }
-        .status-footer { margin-top: 15px; font-size: 14px; font-weight: bold; color: #37474F; background: white; padding: 6px 15px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); z-index: 10; }
+
+        .status-footer {
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #37474F;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>📖 كتاب بصمتي الصغيرة التفاعلي ✨</h1>
+        <h1>بصمتي الصغيرة 📖✨</h1>
+        <p>نسخة الهاتف والآيباد المحدثة - اسحبي لتقليب الصفحات ولوّني باللمس</p>
     </header>
 
-    <audio id="bg-audio" src="song.mp3" loop preload="auto"></audio>
+    <!-- التأكد من كتابة اسم أنشودتك بشكل صحيح هنا -->
+    <audio id="bg-audio" src="alphabet-song.mp3" loop></audio>
 
-    <div class="main-toolbar">
-        <button class="btn active" id="tool-pencil" onclick="setTool('pencil')">✏️ قلم بنسل</button>
-        <button class="btn" id="tool-brush" onclick="setTool('brush')">✨ فرشاة النجوم</button>
+    <div class="toolbar">
+        <button class="btn active" id="tool-pencil" onclick="setTool('pencil')">✏️ بنسل</button>
+        <button class="btn" id="tool-brush" onclick="setTool('brush')">🖌️ فرشاة</button>
         <button class="btn" id="tool-eraser" onclick="setTool('eraser')">🧽 ممحاة</button>
-        <button class="btn btn-audio" id="btn-audio" onclick="toggleAudio()">🎵 تشغيل الأنشودة</button>
-        <button class="btn" onclick="clearCurrentCanvas()" style="border-color: var(--accent); color: #D32F2F;">🗑️ مسح الرسم</button>
-    </div>
+        
+        <div class="color-section">
+            <label style="font-size:11px; font-weight:bold;">🎨 الألوان:</label>
+            <input type="color" id="html-picker" class="native-color-picker" value="#212121" onchange="setAdvancedColor(this.value)">
+        </div>
 
-    <div class="color-palette-container">
-        <div class="palette-title">🎨 علبة الألوان الخشبية (105 لون جاهز):</div>
-        <div class="colors-grid" id="colors-box"></div>
+        <button class="btn btn-audio" id="btn-audio" onclick="toggleAudio()">🎵 الأنشودة</button>
+        <button class="btn" onclick="clearCurrentCanvas()" style="border-color: var(--accent); color: #D32F2F;">🗑️ مسح</button>
     </div>
 
     <div class="scene-container">
-        <button class="nav-arrow arrow-left" onclick="prevPage()">◀️</button>
-        <button class="nav-arrow arrow-right" onclick="nextPage()">▶️</button>
-
         <div class="flat-book" id="book-element">
+            <div class="book-spine-line"></div>
             <div class="page-content-wrapper">
+                <!-- تنبيه مهم: تأكدي أن امتداد الصور في مجلدك هو png بحروف صغيرة -->
                 <img id="current-page-img" src="page1.png" class="page-img" alt="صفحة الكتاب">
                 <canvas id="main-canvas" class="drawing-canvas"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="status-footer" id="page-indicator">الغلاف (صفحة 1 من 32)</div>
+    <div class="status-footer" id="page-indicator">
+        الصفحة الحالية: 1 من 32
+    </div>
 
     <script>
         const totalPages = 32;
         let currentPage = 1;
         let isDrawing = false;
         let currentTool = 'pencil';
-        let currentColor = '#000000';
+        let currentColor = '#212121';
         let lastX = 0; let lastY = 0;
+
+        let touchStartX = 0;
+        let touchStartY = 0;
 
         const canvas = document.getElementById('main-canvas');
         const ctx = canvas.getContext('2d');
@@ -220,115 +222,95 @@
 
         const savedDrawings = {};
 
-        const colors105 = [
-            "#000000","#1A1A1A","#333333","#4D4D4D","#666666","#808080","#999999","#B3B3B3","#CCCCCC","#E6E6E6","#FFFFFF","#2C1A04","#3D2506","#4E3108","#5F3D0A","#70490C","#81550E","#926110","#A36D12","#B47914","#C58516",
-            "#D69118","#3E2723","#4E342E","#5D4037","#6D4C41","#7CB342","#8D6E63","#A1887F","#BCAAA4","#D7CCC8","#EFEBE9","#F5F5F5","#4A0000","#7A0000","#A80000","#D60000","#FF0000","#FF3333","#FF6666","#FF9999","#FFCCCC",
-            "#FFE6E6","#FFF0F0","#880E4F","#AD1457","#C2185B","#D81B60","#E91E63","#F06292","#F48FB1","#F8BBD0","#FFCDD2","#FFEBEE","#4A148C","#7F6E00","#A38D00","#C7AD00","#EBCB00","#FFD700","#FFE135","#FFEA6C","#FFF093",
-            "#FFF5BA","#FFFAD7","#FFFFF0","#E65100","#F57C00","#FF9800","#FFA726","#FFB74D","#FFCC80","#FFE0B2","#FFF3E0","#FFF8E1","#FFF9C4","#FFFDE7","#003300","#004D00","#006600","#008000","#009900","#00CC00","#00FF00",
-            "#33FF33","#66FF66","#99FF99","#CCFFCC","#1B5E20","#2E7D32","#388E3C","#43A047","#4CAF50","#66BB6A","#81C784","#A5D6A7","#C8E6C9","#E8F5E9","#F1F8E9","#000033","#000066","#000099","#0000CC","#0000FF","#3333FF",
-            "#6666FF","#9966FF","#CCCCFF","#E6E6FF","#F0F0FF","#0D47A1","#1565C0","#1976D2","#1E88E5","#2196F3","#42A5F5","#64B5F6","#90CAF9","#BBDEFB","#E3F2FD","#E0F7FA"
-        ];
-
-        function generatePalette() {
-            const box = document.getElementById('colors-box');
-            box.innerHTML = '';
-            colors105.forEach((color) => {
-                const block = document.createElement('div');
-                block.className = 'color-block' + (color === '#000000' ? ' active-color' : '');
-                block.style.backgroundColor = color;
-                block.onclick = function(e) { changeColor(color, block); };
-                box.appendChild(block);
-            });
-        }
-
-        function resizeCanvas() {
-            // أخذ المقاس الفعلي للصورة المعروضة بدقة ليتطابق التلوين
-            canvas.width = pageImg.getBoundingClientRect().width || pageImg.clientWidth;
-            canvas.height = pageImg.getBoundingClientRect().height || pageImg.clientHeight;
+        function initCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             loadCanvasData();
         }
 
         function updateBookPage() {
+            // تحويل اسم الصفحة برمجياً ليتوافق مع الملفات المرفوعة
             pageImg.src = page${currentPage}.png;
-            document.getElementById('page-indicator').textContent = currentPage === 1 ? الغلاف (صفحة 1 من 32) : كتاب الحروف والرسومات التفاعلي - صفحة ${currentPage} من ${totalPages};
-            
-            pageImg.onload = () => {
-                resizeCanvas();
-            };
+            document.getElementById('page-indicator').textContent = الصفحة الحالية: ${currentPage} من ${totalPages};
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            loadCanvasData();
         }
 
-        function drawStar(cx, cy, spikes, outerRadius, innerRadius) {
-            let rot = Math.PI / 2 * 3; let x = cx; let y = cy; let step = Math.PI / spikes;
-            ctx.beginPath(); ctx.moveTo(cx, cy - outerRadius);
-            for (let i = 0; i < spikes; i++) {
-                x = cx + Math.cos(rot) * outerRadius; y = cy + Math.sin(rot) * outerRadius; ctx.lineTo(x, y); rot += step;
-                x = cx + Math.cos(rot) * innerRadius; y = cy + Math.sin(rot) * innerRadius; ctx.lineTo(x, y); rot += step;
-            }
-            ctx.lineTo(cx, cy - outerRadius); ctx.closePath(); ctx.fillStyle = currentColor; ctx.fill();
-        }
-
-        // حساب الإحداثيات الصحيحة للمس فوق الكانفاس بدون تداخل
-        function getPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            if (e.touches && e.touches.length > 0) {
-                return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-            }
-            return { x: e.offsetX, y: e.offsetY };
-        }
-
-        canvas.addEventListener('mousedown', (e) => { 
-            const pos = getPos(e);
-            startDraw(pos.x, pos.y); 
-        });
-        canvas.addEventListener('mousemove', (e) => { 
-            const pos = getPos(e);
-            doDraw(pos.x, pos.y); 
-        });
-        canvas.addEventListener('mouseup', stopDraw);
-
+        // --- دعم أحداث اللمس للأجهزة الذكية والآيباد بالكامل ---
         canvas.addEventListener('touchstart', (e) => {
-            const pos = getPos(e);
-            startDraw(pos.x, pos.y);
-            e.preventDefault();
-        }, {passive: false});
+            isDrawing = true;
+            const coords = getCoords(e, true);
+            lastX = coords.x; lastY = coords.y;
+
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }
+        });
 
         canvas.addEventListener('touchmove', (e) => {
-            const pos = getPos(e);
-            doDraw(pos.x, pos.y);
-            e.preventDefault();
-        }, {passive: false});
-
-        canvas.addEventListener('touchend', stopDraw);
-
-        function startDraw(x, y) {
-            isDrawing = true; lastX = x; lastY = y;
-            if (currentTool === 'brush') { ctx.globalCompositeOperation = 'source-over'; drawStar(x, y, 5, 12, 6); }
-        }
-
-        function doDraw(x, y) {
             if (!isDrawing) return;
-            if (currentTool === 'eraser') {
-                ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y);
-                ctx.globalCompositeOperation = 'destination-out'; ctx.lineWidth = 30; ctx.stroke();
-            } else if (currentTool === 'brush') {
-                ctx.globalCompositeOperation = 'source-over';
-                if (Math.random() > 0.4) { let size = Math.random() * 12 + 6; drawStar(x, y, 5, size, size/2); }
-            } else {
-                ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y);
-                ctx.globalCompositeOperation = 'source-over'; ctx.strokeStyle = currentColor; ctx.lineWidth = 5; ctx.stroke();
+            const coords = getCoords(e, true);
+
+            if (e.touches.length === 1) {
+                const diffX = e.touches[0].clientX - touchStartX;
+                const diffY = e.touches[0].clientY - touchStartY;
+
+                // إذا قام الطفل بسحب أفقي طويل يتم تقليب الصفحة فوراً
+                if (Math.abs(diffX) > 90 && Math.abs(diffY) < 40) {
+                    isDrawing = false;
+                    if (diffX < 0) nextPage(); else prevPage();
+                    return;
+                }
             }
+
+            drawOnCanvas(coords.x, coords.y);
+        });
+
+        canvas.addEventListener('touchend', () => { isDrawing = false; saveCanvasData(); });
+
+        // --- دعم الماوس للكمبيوتر احتياطاً ---
+        canvas.addEventListener('mousedown', (e) => { isDrawing = true; const coords = getCoords(e, false); lastX = coords.x; lastY = coords.y; });
+        canvas.addEventListener('mousemove', (e) => { if (isDrawing) { const coords = getCoords(e, false); drawOnCanvas(coords.x, coords.y); } });
+        canvas.addEventListener('mouseup', () => { isDrawing = false; saveCanvasData(); });
+
+        function drawOnCanvas(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+
+            if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = 30;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = currentTool === 'brush' ? 12 : 3;
+            }
+
+            ctx.stroke();
             lastX = x; lastY = y;
         }
 
-        function stopDraw() { if (isDrawing) { isDrawing = false; savedDrawings[currentPage] = canvas.toDataURL(); } }
-        
+        function saveCanvasData() {
+            savedDrawings[currentPage] = canvas.toDataURL();
+        }
+
         function loadCanvasData() {
             if (savedDrawings[currentPage]) {
-                const img = new Image(); img.src = savedDrawings[currentPage];
-                img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const img = new Image();
+                img.src = savedDrawings[currentPage];
+                img.onload = () => ctx.drawImage(img, 0, 0);
             }
+        }
+
+        function getCoords(e, isTouch) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX = isTouch ? e.touches[0].clientX : e.clientX;
+            let clientY = isTouch ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
         }
 
         function nextPage() { if (currentPage < totalPages) { currentPage++; updateBookPage(); } }
@@ -336,34 +318,33 @@
 
         function setTool(tool) {
             currentTool = tool;
-            document.querySelectorAll('.main-toolbar .btn').forEach(b => {
+            document.querySelectorAll('.toolbar .btn').forEach(b => {
                 if(b.id === 'tool-' + tool) b.classList.add('active');
                 else b.classList.remove('active');
             });
         }
 
-        function changeColor(color, element) {
-            currentColor = color; if(currentTool === 'eraser') setTool('pencil');
-            document.querySelectorAll('.color-block').forEach(b => b.classList.remove('active-color'));
-            if(element) element.classList.add('active-color');
+        function setAdvancedColor(color) {
+            currentColor = color;
+            if(currentTool === 'eraser') setTool('brush');
         }
 
-        function clearCurrentCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); delete savedDrawings[currentPage]; }
+        function clearCurrentCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            delete savedDrawings[currentPage];
+        }
 
         function toggleAudio() {
             if (audio.paused) {
-                audio.play().catch(err => console.log("التفاعل مطلوب أولاً"));
-                audioBtn.textContent = "⏸️ إيقاف الأنشودة";
+                audio.play().then(() => { audioBtn.textContent = "⏸️ إيقاف الأنشودة"; })
+                .catch(() => { alert("اضغطي على الشاشة أولاً لتنشيط الصوت في متصفح الآيباد!"); });
             } else {
-                audio.pause(); audioBtn.textContent = "🎵 تشغيل الأنشودة";
+                audio.pause(); audioBtn.textContent = "🎵 الأنشودة";
             }
         }
 
-        window.addEventListener('load', () => {
-            generatePalette();
-            updateBookPage();
-        });
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('load', () => { initCanvas(); });
+        window.addEventListener('resize', () => { initCanvas(); });
     </script>
 </body>
 </html>
